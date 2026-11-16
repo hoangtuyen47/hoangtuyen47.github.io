@@ -634,6 +634,212 @@
   <!-- ========================================================================= -->
   <!-- MODAL CHỈNH SỬA BÀI VIẾT KHO HỌC LIỆU SỐ (FULL OPTION + UPLOAD ẢNH & SƠ ĐỒ) -->
   <!-- ========================================================================= -->
+  
+  <!-- ========================================================================= -->
+  <!-- MODAL CHỈNH SỬA LỚP HỌC (CÓ UPLOAD ẢNH & ĐIỂM NỔI BẬT) -->
+  <!-- ========================================================================= -->
+  <div id="modal-edit-class" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[92vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden my-auto animate-fadeIn">
+      <!-- Header Modal -->
+      <div class="px-6 py-4 bg-gradient-to-r from-slate-900 via-slate-800 to-emerald-950 text-white flex items-center justify-between border-b border-slate-700">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white shadow-md">
+            <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-base text-white flex items-center gap-2">
+              <span>Chỉnh Sửa Lớp Học</span>
+              <span id="edit-cls-badge-tag" class="px-2 py-0.5 rounded text-[10.5px] font-mono font-bold bg-emerald-500/30 text-emerald-200 border border-emerald-400/30">#ID</span>
+            </h3>
+            <p class="text-xs text-slate-300">Cập nhật thông tin khóa đào tạo, đối tượng, lịch học & tải ảnh từ máy</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeEditClassModal()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-colors">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Body Modal: Form chỉnh sửa Lớp học -->
+      <form id="form-edit-class" onsubmit="handleSaveClassEdit(event)" class="p-6 overflow-y-auto space-y-4 text-xs flex-1">
+        <input type="hidden" id="edit-cls-id">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">1. Tên Khóa Học (*):</label>
+            <input type="text" id="edit-cls-title" required placeholder="VD: Khóa Lập Trình Robot STEM..." class="w-full p-2.5 border rounded-lg font-bold text-slate-900">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">2. Huy Hiệu (*):</label>
+            <input type="text" id="edit-cls-badge" required placeholder="VD: Tuyển sinh, Kỹ năng số..." class="w-full p-2.5 border rounded-lg font-medium">
+          </div>
+        </div>
+
+        <!-- Tải ảnh khóa học từ máy -->
+        <div class="p-3.5 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+          <div class="flex items-center justify-between">
+            <label class="block font-bold text-slate-800">3. Ảnh Minh Họa Khóa Học (*):</label>
+            <span class="text-[11px] text-slate-500">Dán link ảnh hoặc tải ảnh từ máy tính</span>
+          </div>
+          <div class="flex flex-col sm:flex-row items-center gap-3">
+            <input type="text" id="edit-cls-image" oninput="updateEditClassImagePreview(this.value)" placeholder="assets/images/lop_hoc_ky_nang_so.png" required class="flex-1 p-2.5 border rounded-lg font-mono text-[11px] bg-white w-full">
+            <label class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold cursor-pointer flex items-center gap-1.5 shadow-2xs whitespace-nowrap shrink-0 transition-colors">
+              <i data-lucide="upload" class="w-4 h-4"></i>
+              <span>Chọn Ảnh Từ Máy</span>
+              <input type="file" accept="image/*" onchange="handleFileUpload(this, 'edit-cls-image', 'preview-edit-cls-image', 800)" class="hidden">
+            </label>
+          </div>
+          <div class="flex items-center gap-3 pt-1">
+            <span class="text-[11px] text-slate-500 font-semibold">Xem trước:</span>
+            <img id="preview-edit-cls-image" src="" alt="Xem trước ảnh lớp học" class="w-20 h-14 object-cover rounded-lg border border-slate-300 shadow-2xs bg-white" onerror="this.onerror=null; this.src='assets/images/lop_hoc_ky_nang_so.png';">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">4. Đối Tượng Học Sinh (*):</label>
+            <input type="text" id="edit-cls-target" required placeholder="VD: Học sinh THCS & THPT (Lớp 6 - 12)..." class="w-full p-2.5 border rounded-lg">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">5. Lịch Học Thời Gian (*):</label>
+            <input type="text" id="edit-cls-schedule" required placeholder="VD: Tối Thứ 3 - Thứ 5 hoặc Chiều Thứ 7..." class="w-full p-2.5 border rounded-lg">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">6. Trạng Thái Khóa Học:</label>
+            <input type="text" id="edit-cls-status" placeholder="VD: Đang tuyển sinh, Sắp khai giảng..." class="w-full p-2.5 border rounded-lg">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">7. Link Đăng Ký / Kênh Zalo (*):</label>
+            <input type="url" id="edit-cls-reg" required placeholder="https://zalo.me/..." class="w-full p-2.5 border rounded-lg font-mono text-[11px]">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">8. Các Điểm Nổi Bật (Mỗi dòng là 1 gạch đầu dòng):</label>
+          <textarea id="edit-cls-highlights" rows="4" placeholder="Nhập từng điểm nổi bật trên từng dòng..." class="w-full p-2.5 border rounded-lg text-xs leading-relaxed"></textarea>
+        </div>
+
+        <!-- Footer Buttons -->
+        <div class="pt-4 border-t flex items-center justify-end gap-3 sticky bottom-0 bg-white py-2">
+          <button type="button" onclick="closeEditClassModal()" class="px-5 py-2.5 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold transition-colors">
+            Hủy bỏ
+          </button>
+          <button type="submit" class="px-6 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl font-bold flex items-center gap-2 shadow-md transition-all">
+            <i data-lucide="check-circle" class="w-4 h-4"></i>
+            <span>Lưu Thay Đổi Lớp Học</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL CHỈNH SỬA CÔNG CỤ SỐ (CÓ UPLOAD ẢNH & TÀI KHOẢN DEMO) -->
+  <!-- ========================================================================= -->
+  <div id="modal-edit-system" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[92vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden my-auto animate-fadeIn">
+      <!-- Header Modal -->
+      <div class="px-6 py-4 bg-gradient-to-r from-slate-900 via-slate-800 to-blue-950 text-white flex items-center justify-between border-b border-slate-700">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-md">
+            <i data-lucide="layers" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-base text-white flex items-center gap-2">
+              <span>Chỉnh Sửa Công Cụ Số</span>
+              <span id="edit-sys-badge-tag" class="px-2 py-0.5 rounded text-[10.5px] font-mono font-bold bg-blue-500/30 text-blue-200 border border-blue-400/30">#ID</span>
+            </h3>
+            <p class="text-xs text-slate-300">Cập nhật phần mềm, tính năng nổi bật, tài khoản demo & tải ảnh từ máy</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeEditSystemModal()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-colors">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Body Modal: Form chỉnh sửa Công cụ số -->
+      <form id="form-edit-system" onsubmit="handleSaveSystemEdit(event)" class="p-6 overflow-y-auto space-y-4 text-xs flex-1">
+        <input type="hidden" id="edit-sys-id">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">1. Tên Công Cụ / Phần Mềm (*):</label>
+            <input type="text" id="edit-sys-title" required placeholder="VD: Hệ Thống Số Hóa Nền Nếp..." class="w-full p-2.5 border rounded-lg font-bold text-slate-900">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">2. Huy Hiệu (*):</label>
+            <input type="text" id="edit-sys-badge" required placeholder="VD: Quản trị số, Khảo thí..." class="w-full p-2.5 border rounded-lg font-medium">
+          </div>
+        </div>
+
+        <!-- Tải ảnh công cụ số từ máy -->
+        <div class="p-3.5 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+          <div class="flex items-center justify-between">
+            <label class="block font-bold text-slate-800">3. Ảnh Giao Diện Dashboard / Minh Họa (*):</label>
+            <span class="text-[11px] text-slate-500">Dán link ảnh hoặc tải ảnh từ máy tính</span>
+          </div>
+          <div class="flex flex-col sm:flex-row items-center gap-3">
+            <input type="text" id="edit-sys-image" oninput="updateEditSystemImagePreview(this.value)" placeholder="assets/images/dashboard-school.png" required class="flex-1 p-2.5 border rounded-lg font-mono text-[11px] bg-white w-full">
+            <label class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold cursor-pointer flex items-center gap-1.5 shadow-2xs whitespace-nowrap shrink-0 transition-colors">
+              <i data-lucide="upload" class="w-4 h-4"></i>
+              <span>Chọn Ảnh Từ Máy</span>
+              <input type="file" accept="image/*" onchange="handleFileUpload(this, 'edit-sys-image', 'preview-edit-sys-image', 900)" class="hidden">
+            </label>
+          </div>
+          <div class="flex items-center gap-3 pt-1">
+            <span class="text-[11px] text-slate-500 font-semibold">Xem trước:</span>
+            <img id="preview-edit-sys-image" src="" alt="Xem trước ảnh công cụ" class="w-20 h-14 object-cover rounded-lg border border-slate-300 shadow-2xs bg-white" onerror="this.onerror=null; this.src='assets/images/dashboard-school.png';">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">4. Mô Tả Công Cụ / Giải Pháp (*):</label>
+          <textarea id="edit-sys-desc" rows="3" placeholder="Mô tả chức năng chính của phần mềm..." required class="w-full p-2.5 border rounded-lg text-xs leading-relaxed"></textarea>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">5. Các Tính Năng Nổi Bật (Mỗi dòng là 1 tính năng):</label>
+          <textarea id="edit-sys-features" rows="3" placeholder="Nhập từng tính năng trên từng dòng..." class="w-full p-2.5 border rounded-lg text-xs leading-relaxed"></textarea>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">6. Link Trải Nghiệm Demo (*):</label>
+            <input type="url" id="edit-sys-demo" required placeholder="https://..." class="w-full p-2.5 border rounded-lg font-mono text-[11px]">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">7. Link Hướng Dẫn / Đăng Ký (Zalo) (*):</label>
+            <input type="url" id="edit-sys-reg" required placeholder="https://zalo.me/..." class="w-full p-2.5 border rounded-lg font-mono text-[11px]">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">8. Tên Đăng Nhập Demo (nếu có):</label>
+            <input type="text" id="edit-sys-user" placeholder="VD: admin, giaovien..." class="w-full p-2.5 border rounded-lg font-mono text-xs">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">9. Mật Khẩu Demo (nếu có):</label>
+            <input type="text" id="edit-sys-pass" placeholder="VD: 123456, demo@2026..." class="w-full p-2.5 border rounded-lg font-mono text-xs">
+          </div>
+        </div>
+
+        <!-- Footer Buttons -->
+        <div class="pt-4 border-t flex items-center justify-end gap-3 sticky bottom-0 bg-white py-2">
+          <button type="button" onclick="closeEditSystemModal()" class="px-5 py-2.5 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold transition-colors">
+            Hủy bỏ
+          </button>
+          <button type="submit" class="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl font-bold flex items-center gap-2 shadow-md transition-all">
+            <i data-lucide="check-circle" class="w-4 h-4"></i>
+            <span>Lưu Thay Đổi Công Cụ</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <div id="modal-edit-lesson" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
     <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[92vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden my-auto animate-fadeIn">
       <!-- Header Modal -->
@@ -1038,12 +1244,35 @@
       if (!container) return;
 
       const classes = PORTFOLIO_DATA.classes || [];
-      container.innerHTML = classes.map(c => `
-        <div class="admin-card p-4 space-y-2 border">
-          <span class="px-2 py-0.5 rounded text-[10.5px] font-bold bg-red-100 text-red-800">${c.badge}</span>
-          <h4 class="font-bold text-sm text-slate-900">${c.title}</h4>
-          <p class="text-xs text-slate-600">🎯 ${c.target}</p>
-          <p class="text-xs text-slate-500">⏰ ${c.schedule}</p>
+      container.innerHTML = classes.map((c, idx) => `
+        <div class="admin-card p-4 flex flex-col justify-between space-y-3 border hover:border-emerald-400 transition-all bg-white rounded-xl shadow-xs">
+          <div class="space-y-2.5">
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="px-2.5 py-0.5 rounded-full font-bold bg-emerald-100 text-emerald-800 border border-emerald-200 shadow-2xs">${c.badge}</span>
+              <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">${c.status || 'Đang tuyển sinh'}</span>
+            </div>
+
+            <div class="flex gap-3 items-start">
+              <img src="${c.image || 'assets/images/lop_hoc_ky_nang_so.png'}" alt="${c.title}" class="w-16 h-12 object-cover rounded-lg border border-slate-200 shrink-0 bg-slate-50 shadow-2xs" onerror="this.onerror=null; this.src='assets/images/lop_hoc_ky_nang_so.png';">
+              <div class="min-w-0 flex-1">
+                <h4 class="font-bold text-xs sm:text-sm text-slate-900 leading-snug line-clamp-2 hover:text-emerald-700 transition-colors" title="${c.title}">${c.title}</h4>
+                <p class="text-[11px] text-slate-500 mt-0.5 truncate">🎯 ${c.target}</p>
+              </div>
+            </div>
+
+            <p class="text-xs text-slate-600">⏰ <span class="font-medium text-slate-800">${c.schedule}</span></p>
+          </div>
+
+          <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+            <button onclick="openEditClassModal('${c.id}')" class="px-3 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-600 text-emerald-700 hover:text-white border border-emerald-200 text-xs font-bold flex items-center gap-1.5 transition-all shadow-2xs">
+              <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+              <span>Sửa lớp học</span>
+            </button>
+            <button onclick="deleteClass('${c.id}')" class="px-3 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white border border-rose-200 text-xs font-bold flex items-center gap-1.5 transition-all shadow-2xs">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              <span>Xóa</span>
+            </button>
+          </div>
         </div>
       `).join('');
       lucide.createIcons();
@@ -1054,17 +1283,37 @@
       if (!container) return;
 
       const systems = PORTFOLIO_DATA.systems || [];
-      container.innerHTML = systems.map(s => `
-        <div class="admin-card p-4 space-y-2 border">
-          <div class="flex items-center justify-between">
-            <span class="px-2 py-0.5 rounded text-[10.5px] font-bold bg-blue-100 text-blue-800">${s.badge}</span>
-            <a href="${s.demoLink}" target="_blank" class="text-xs text-blue-600 hover:underline flex items-center gap-1 font-bold">
-              <span>Trải nghiệm</span>
-              <i data-lucide="external-link" class="w-3 h-3"></i>
-            </a>
+      container.innerHTML = systems.map((s, idx) => `
+        <div class="admin-card p-4 flex flex-col justify-between space-y-3 border hover:border-blue-400 transition-all bg-white rounded-xl shadow-xs">
+          <div class="space-y-2.5">
+            <div class="flex items-center justify-between text-[11px]">
+              <span class="px-2.5 py-0.5 rounded-full font-bold bg-blue-100 text-blue-800 border border-blue-200 shadow-2xs">${s.badge}</span>
+              <a href="${s.demoLink}" target="_blank" class="text-xs text-blue-600 hover:underline flex items-center gap-1 font-bold">
+                <span>Trải nghiệm</span>
+                <i data-lucide="external-link" class="w-3 h-3"></i>
+              </a>
+            </div>
+
+            <div class="flex gap-3 items-start">
+              <img src="${s.image || 'assets/images/dashboard-school.png'}" alt="${s.title}" class="w-16 h-12 object-cover rounded-lg border border-slate-200 shrink-0 bg-slate-50 shadow-2xs" onerror="this.onerror=null; this.src='assets/images/dashboard-school.png';">
+              <div class="min-w-0 flex-1">
+                <h4 class="font-bold text-xs sm:text-sm text-slate-900 leading-snug line-clamp-2 hover:text-blue-700 transition-colors" title="${s.title}">${s.title}</h4>
+              </div>
+            </div>
+
+            <p class="text-xs text-slate-500 line-clamp-2 leading-relaxed">${s.description}</p>
           </div>
-          <h4 class="font-bold text-sm text-slate-900">${s.title}</h4>
-          <p class="text-xs text-slate-600">${s.description}</p>
+
+          <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+            <button onclick="openEditSystemModal('${s.id}')" class="px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-600 text-blue-700 hover:text-white border border-blue-200 text-xs font-bold flex items-center gap-1.5 transition-all shadow-2xs">
+              <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+              <span>Sửa công cụ</span>
+            </button>
+            <button onclick="deleteSystem('${s.id}')" class="px-3 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white border border-rose-200 text-xs font-bold flex items-center gap-1.5 transition-all shadow-2xs">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              <span>Xóa</span>
+            </button>
+          </div>
         </div>
       `).join('');
       lucide.createIcons();
@@ -1384,17 +1633,189 @@
       showToast('✅ Đã lưu cập nhật bài viết thành công!');
     }
 
+
+    // =========================================================================
+    // 5. CHỨC NĂNG CHỈNH SỬA LỚP HỌC (MODAL EDIT CLASS)
+    // =========================================================================
+    function openEditClassModal(classId) {
+      const cls = (PORTFOLIO_DATA.classes || []).find(c => c.id === classId);
+      if (!cls) {
+        alert('Không tìm thấy lớp học cần sửa!');
+        return;
+      }
+
+      document.getElementById('edit-cls-id').value = cls.id;
+      document.getElementById('edit-cls-badge-tag').textContent = '#' + cls.id;
+      document.getElementById('edit-cls-title').value = cls.title || '';
+      document.getElementById('edit-cls-badge').value = cls.badge || '';
+      document.getElementById('edit-cls-image').value = cls.image || '';
+
+      const preview = document.getElementById('preview-edit-cls-image');
+      if (preview) {
+        preview.src = cls.image || 'assets/images/lop_hoc_ky_nang_so.png';
+        preview.classList.remove('hidden');
+      }
+
+      document.getElementById('edit-cls-target').value = cls.target || '';
+      document.getElementById('edit-cls-schedule').value = cls.schedule || '';
+      document.getElementById('edit-cls-status').value = cls.status || 'Đang tuyển sinh';
+      document.getElementById('edit-cls-reg').value = cls.registerLink || '';
+      document.getElementById('edit-cls-highlights').value = Array.isArray(cls.highlights) ? cls.highlights.join('\n') : '';
+
+      const modal = document.getElementById('modal-edit-class');
+      if (modal) {
+        modal.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+      }
+      lucide.createIcons();
+    }
+
+    function closeEditClassModal() {
+      const modal = document.getElementById('modal-edit-class');
+      if (modal) {
+        modal.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+      }
+    }
+
+    function updateEditClassImagePreview(src) {
+      const preview = document.getElementById('preview-edit-cls-image');
+      if (preview) {
+        preview.src = src || 'assets/images/lop_hoc_ky_nang_so.png';
+        preview.classList.remove('hidden');
+      }
+    }
+
+    function handleSaveClassEdit(e) {
+      e.preventDefault();
+      const id = document.getElementById('edit-cls-id').value;
+      const cls = (PORTFOLIO_DATA.classes || []).find(c => c.id === id);
+      if (!cls) {
+        alert('Lỗi: Không tìm thấy lớp học để cập nhật!');
+        return;
+      }
+
+      cls.title = document.getElementById('edit-cls-title').value.trim();
+      cls.badge = document.getElementById('edit-cls-badge').value.trim();
+      cls.image = document.getElementById('edit-cls-image').value.trim() || 'assets/images/lop_hoc_ky_nang_so.png';
+      cls.target = document.getElementById('edit-cls-target').value.trim();
+      cls.schedule = document.getElementById('edit-cls-schedule').value.trim();
+      cls.status = document.getElementById('edit-cls-status').value.trim() || 'Đang tuyển sinh';
+      cls.registerLink = document.getElementById('edit-cls-reg').value.trim() || 'https://zalo.me';
+      
+      const hlText = document.getElementById('edit-cls-highlights').value.trim();
+      cls.highlights = hlText ? hlText.split('\n').filter(l => l.trim()) : [];
+
+      saveLocalAdminData();
+      renderAdminClassesList();
+      updateExportCodePreview();
+      closeEditClassModal();
+      showToast('✅ Đã lưu cập nhật lớp học thành công!');
+    }
+
+    // =========================================================================
+    // 6. CHỨC NĂNG CHỈNH SỬA CÔNG CỤ SỐ (MODAL EDIT SYSTEM)
+    // =========================================================================
+    function openEditSystemModal(systemId) {
+      const sys = (PORTFOLIO_DATA.systems || []).find(s => s.id === systemId);
+      if (!sys) {
+        alert('Không tìm thấy công cụ cần sửa!');
+        return;
+      }
+
+      document.getElementById('edit-sys-id').value = sys.id;
+      document.getElementById('edit-sys-badge-tag').textContent = '#' + sys.id;
+      document.getElementById('edit-sys-title').value = sys.title || '';
+      document.getElementById('edit-sys-badge').value = sys.badge || '';
+      document.getElementById('edit-sys-image').value = sys.image || '';
+
+      const preview = document.getElementById('preview-edit-sys-image');
+      if (preview) {
+        preview.src = sys.image || 'assets/images/dashboard-school.png';
+        preview.classList.remove('hidden');
+      }
+
+      document.getElementById('edit-sys-desc').value = sys.description || '';
+      document.getElementById('edit-sys-features').value = Array.isArray(sys.features) ? sys.features.join('\n') : '';
+      document.getElementById('edit-sys-demo').value = sys.demoLink || '';
+      document.getElementById('edit-sys-reg').value = sys.registerLink || '';
+      document.getElementById('edit-sys-user').value = sys.demoAccount?.user || '';
+      document.getElementById('edit-sys-pass').value = sys.demoAccount?.pass || '';
+
+      const modal = document.getElementById('modal-edit-system');
+      if (modal) {
+        modal.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+      }
+      lucide.createIcons();
+    }
+
+    function closeEditSystemModal() {
+      const modal = document.getElementById('modal-edit-system');
+      if (modal) {
+        modal.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+      }
+    }
+
+    function updateEditSystemImagePreview(src) {
+      const preview = document.getElementById('preview-edit-sys-image');
+      if (preview) {
+        preview.src = src || 'assets/images/dashboard-school.png';
+        preview.classList.remove('hidden');
+      }
+    }
+
+    function handleSaveSystemEdit(e) {
+      e.preventDefault();
+      const id = document.getElementById('edit-sys-id').value;
+      const sys = (PORTFOLIO_DATA.systems || []).find(s => s.id === id);
+      if (!sys) {
+        alert('Lỗi: Không tìm thấy công cụ để cập nhật!');
+        return;
+      }
+
+      sys.title = document.getElementById('edit-sys-title').value.trim();
+      sys.badge = document.getElementById('edit-sys-badge').value.trim();
+      sys.image = document.getElementById('edit-sys-image').value.trim() || 'assets/images/dashboard-school.png';
+      sys.description = document.getElementById('edit-sys-desc').value.trim();
+      
+      const featText = document.getElementById('edit-sys-features').value.trim();
+      sys.features = featText ? featText.split('\n').filter(l => l.trim()) : [];
+
+      sys.demoLink = document.getElementById('edit-sys-demo').value.trim() || 'https://hoangtuyen47.github.io';
+      sys.registerLink = document.getElementById('edit-sys-reg').value.trim() || 'https://zalo.me';
+
+      const user = document.getElementById('edit-sys-user').value.trim();
+      const pass = document.getElementById('edit-sys-pass').value.trim();
+      if (user || pass) {
+        sys.demoAccount = { user: user, pass: pass };
+      }
+
+      saveLocalAdminData();
+      renderAdminSystemsList();
+      updateExportCodePreview();
+      closeEditSystemModal();
+      showToast('✅ Đã lưu cập nhật công cụ thành công!');
+    }
+
     // Đóng Modal khi nhấn phím Escape hoặc click ra ngoài
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         closeEditLessonModal();
+        closeEditClassModal();
+        closeEditSystemModal();
       }
     });
 
     document.getElementById('modal-edit-lesson')?.addEventListener('click', (e) => {
-      if (e.target.id === 'modal-edit-lesson') {
-        closeEditLessonModal();
-      }
+      if (e.target.id === 'modal-edit-lesson') closeEditLessonModal();
+    });
+    document.getElementById('modal-edit-class')?.addEventListener('click', (e) => {
+      if (e.target.id === 'modal-edit-class') closeEditClassModal();
+    });
+    document.getElementById('modal-edit-system')?.addEventListener('click', (e) => {
+      if (e.target.id === 'modal-edit-system') closeEditSystemModal();
     });
 
   </script>
