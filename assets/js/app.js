@@ -775,25 +775,16 @@ function saveLocalAdminData() {
 
 function loadLocalAdminData() {
   try {
-    // Xóa bộ nhớ đệm cũ trường THPT nếu còn sót
+    // Xóa sạch bộ nhớ đệm cũ để luôn ưu tiên hiển thị dữ liệu gốc mới nhất từ data.js
     localStorage.removeItem('THPT_EAHLEO_PORTFOLIO_DATA');
     localStorage.removeItem('THPT_EAHLEO_ADMIN_PIN');
+    localStorage.removeItem('THAY_TUYEN_PORTFOLIO_DATA');
 
     const savedPin = localStorage.getItem('THAY_TUYEN_ADMIN_PIN');
     if (savedPin && savedPin !== 'admin123' && savedPin !== 'admin') {
       PORTFOLIO_DATA.adminPin = savedPin;
     } else {
       localStorage.setItem('THAY_TUYEN_ADMIN_PIN', PORTFOLIO_DATA.adminPin);
-    }
-    const saved = localStorage.getItem('THAY_TUYEN_PORTFOLIO_DATA');
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      // Chỉ khôi phục dữ liệu nếu cùng phiên bản; nếu phiên bản cũ thì cập nhật bộ nhớ mới
-      if (parsed.version === PORTFOLIO_DATA.version && parsed.studentLibrary && parsed.studentLibrary.length > 0) {
-        Object.assign(PORTFOLIO_DATA, parsed);
-      } else {
-        localStorage.setItem('THAY_TUYEN_PORTFOLIO_DATA', JSON.stringify(PORTFOLIO_DATA));
-      }
     }
   } catch (e) {}
 }
