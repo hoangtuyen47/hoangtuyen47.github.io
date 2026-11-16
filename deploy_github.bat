@@ -6,11 +6,22 @@ echo   Website Ca Nhan • Hoang Tuyen
 echo ========================================================
 echo.
 
-set DEFAULT_URL=https://github.com/hoangtuyen47/vuivui.git
-echo Mac dinh kho luu tru: %DEFAULT_URL%
-set /p REPO_URL="Bam ENTER de day len kho mac dinh tren: "
+set DEFAULT_URL=https://github.com/hoangtuyen47/hoangtuyen47.github.io.git
+set FALLBACK_URL=https://github.com/hoangtuyen47/vuivui.git
 
-if "%REPO_URL%"=="" set REPO_URL=%DEFAULT_URL%
+echo Kho mac dinh: %DEFAULT_URL%
+echo Neu ban chua doi ten kho (van la vuivui), go so 2 roi Enter.
+echo.
+echo [1] Day len: hoangtuyen47.github.io (Trang chu chinh)
+echo [2] Day len: vuivui (Kho cu)
+echo.
+set /p CHOICE="Chon [1] hoac [2] (Mac dinh la 1): "
+
+if "%CHOICE%"=="2" (
+    set REPO_URL=%FALLBACK_URL%
+) else (
+    set REPO_URL=%DEFAULT_URL%
+)
 
 echo.
 echo Dang day ma nguon len: %REPO_URL%
@@ -27,7 +38,7 @@ echo [2/4] Them toan bo ma nguon va tep tinh...
 git add .
 
 echo [3/4] Tao ban ghi chu Commit...
-git commit -m "Cap nhat 12 bai hoc 3 nhom va bao mat admin - %date% %time%"
+git commit -m "Cap nhat website Hoang Tuyen - %date% %time%"
 
 echo [4/4] Day ma nguon len GitHub...
 git remote remove origin 2>nul
@@ -37,7 +48,6 @@ git push -u origin main --force
 echo.
 echo ========================================================
 echo   HOAN TAT DAY MA NGUON LEN GITHUB!
-echo   Website se tu dong cap nhat trong 1-2 phut.
 echo ========================================================
 echo.
 pause
