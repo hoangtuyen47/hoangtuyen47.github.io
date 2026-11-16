@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 180" width="100%" height="100%">
+  <defs>
+    <filter id="personal-glow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3.5" flood-color="#000000" flood-opacity="0.32"/>
+    </filter>
+    <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="50%" stop-color="#fde047"/>
+      <stop offset="100%" stop-color="#eab308"/>
+    </linearGradient>
+    <linearGradient id="cyan-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="shield-rim" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fde047"/>
+      <stop offset="100%" stop-color="#ca8a04"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Left: Personal Emblem Crest (140x140) -->
+  <g transform="translate(15, 20)" filter="url(#personal-glow)">
+    <!-- Outer Shield / Circle with gold rim -->
+    <circle cx="70" cy="70" r="68" fill="#ffffff" stroke="url(#shield-rim)" stroke-width="4.5"/>
+    <circle cx="70" cy="70" r="59" fill="none" stroke="#e11d48" stroke-width="1.8" stroke-dasharray="4 2"/>
+    
+    <!-- Inner Deep Tech Disc -->
+    <circle cx="70" cy="70" r="48" fill="url(#cyan-blue)"/>
+    
+    <!-- Modern Tech Chip / Atom Orbit -->
+    <ellipse cx="70" cy="70" rx="36" ry="14" fill="none" stroke="#38bdf8" stroke-width="1.5" transform="rotate(-30 70 70)"/>
+    <ellipse cx="70" cy="70" rx="36" ry="14" fill="none" stroke="#facc15" stroke-width="1.5" transform="rotate(30 70 70)"/>
+    <circle cx="70" cy="70" r="13" fill="#0284c7" stroke="#ffffff" stroke-width="1.5"/>
+
+    <!-- Personal Monogram 'HNT' -->
+    <text x="70" y="75" font-family="'Be Vietnam Pro', Arial, sans-serif" font-size="11" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="1">HNT</text>
+    
+    <!-- Small Knowledge Sparks -->
+    <circle cx="38" cy="52" r="2.5" fill="#fde047"/>
+    <circle cx="102" cy="88" r="2.5" fill="#38bdf8"/>
+    <circle cx="70" cy="28" r="2.5" fill="#ffffff"/>
+
+    <!-- Circular Personal Subtitle -->
+    <path id="personal-ring-path" d="M 22,70 A 48,48 0 0,1 118,70" fill="none"/>
+    <text font-family="'Be Vietnam Pro', Arial, sans-serif" font-size="8.5" font-weight="900" fill="#b91c1c" letter-spacing="1.2">
+      <textPath href="#personal-ring-path" startOffset="50%" text-anchor="middle">EDTECH &amp; STEM HUB</textPath>
+    </text>
+  </g>
+
+  <!-- Right: Personal Brand Typography -->
+  <g transform="translate(175, 40)" filter="url(#personal-glow)">
+    <!-- Brand Subtitle / Category -->
+    <text x="0" y="16" font-family="'Be Vietnam Pro', Arial, sans-serif" font-size="12.5" font-weight="700" fill="url(#gold-grad)" letter-spacing="1.5">
+      GIÁO DỤC SỐ &amp; ĐÀO TẠO STEM THỰC CHIẾN
+    </text>
+    
+    <!-- Teacher Name -->
+    <text x="0" y="55" font-family="'Be Vietnam Pro', Arial, sans-serif" font-size="32" font-weight="900" fill="#ffffff" letter-spacing="0.5">
+      HOÀNG TUYÊN
+    </text>
+    
+    <!-- Modern Badge Pill -->
+    <g transform="translate(0, 72)">
+      <rect x="0" y="0" width="375" height="28" rx="14" fill="rgba(0, 0, 0, 0.28)" stroke="rgba(255, 255, 255, 0.28)" stroke-width="1"/>
+      <circle cx="14" cy="14" r="4.5" fill="#22c55e"/>
+      <text x="27" y="18.5" font-family="'Be Vietnam Pro', Arial, sans-serif" font-size="11" font-weight="700" fill="#ffffff" letter-spacing="0.3">
+        KHO HỌC LIỆU SỐ • HỆ THỐNG CÔNG CỤ DẠY HỌC 4.0
+      </text>
+    </g>
+  </g>
+</svg>

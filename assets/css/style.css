@@ -1,0 +1,333 @@
+/* ==========================================================================
+   STYLE SYSTEM: HỆ THỐNG TIỆN ÍCH GIÁO DỤC • HOÀNG TUYÊN
+   Phong cách chuẩn: NỀN TRẮNG SÁNG, ĐIỂM NHẤN ĐỎ CỜ HIỆN ĐẠI & THANH LỊCH
+   ========================================================================== */
+
+:root {
+  --primary-red: #c82333;
+  --dark-red: #991b1b;
+  --hover-red: #b91c1c;
+  --light-red: #dc2626;
+  --soft-red-bg: #fff1f2;
+  --bg-page: #f8fafc;
+  --bg-card: #ffffff;
+  --border-light: #e2e8f0;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  background-color: #f8fafc !important;
+  color: #1e293b !important;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+  padding: 0;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* ==========================================================================
+   LEFT SIDEBAR CONTAINER (Viền & màu sắc nổi bật, không hoà lẫn cột chính)
+   ========================================================================== */
+.sidebar-left-panel {
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%) !important;
+  border: 2px solid #cbd5e1 !important;
+  border-radius: 20px !important;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.sidebar-left-panel:hover {
+  border-color: #94a3b8 !important;
+  box-shadow: 0 16px 32px -5px rgba(15, 23, 42, 0.12) !important;
+}
+
+.sidebar-left-panel .portal-card {
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
+.sidebar-left-panel .portal-card:hover {
+  border-color: #fca5a5 !important;
+}
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #f1f5f9;
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: #0f172a !important;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.section-title::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 18px;
+  background-color: var(--primary-red);
+  border-radius: 2px;
+}
+
+/* White Card Containers */
+.portal-card {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.25s ease-in-out;
+}
+
+.portal-card:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  border-color: #cbd5e1 !important;
+}
+
+.portal-card-interactive {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.portal-card-interactive:hover {
+  transform: translateY(-3px);
+  border-color: #fca5a5 !important;
+  box-shadow: 0 8px 24px rgba(200, 35, 51, 0.12);
+}
+
+/* ==========================================================================
+   HEADER BANNER 1920 x 250 (Đúng kích thước, nền đỏ nhẹ, chia 2 bên)
+   ========================================================================== */
+.header-banner-container {
+  width: 100%;
+  background: linear-gradient(90deg, #aa1927 0%, #be1e2d 28%, #cb2636 60%, #dc3545 100%) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.banner-decor-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: 
+    radial-gradient(circle at 15% 50%, rgba(255, 255, 255, 0.12) 0%, transparent 45%),
+    radial-gradient(circle at 85% 50%, rgba(255, 255, 255, 0.10) 0%, transparent 45%),
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 24px 24px, 24px 24px;
+}
+
+.banner-inner-1920 {
+  width: 100%;
+  max-width: 1920px;
+  margin-left: auto;
+  margin-right: auto;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  position: relative;
+  z-index: 10;
+}
+
+@media (min-width: 640px) {
+  .banner-inner-1920 {
+    height: 165px;
+    padding: 0.75rem 2rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .banner-inner-1920 {
+    height: 200px;
+    padding: 1rem 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .banner-inner-1920 {
+    height: 250px;
+    padding: 1rem 3.5rem;
+  }
+}
+
+/* Red Banner & Nav Gradients (Đỏ nhẹ, thanh lịch & tươi sáng hơn) */
+.school-banner-gradient {
+  background: linear-gradient(135deg, #991b1b 0%, #b91c1c 40%, #c82333 75%, #dc2626 100%) !important;
+}
+
+.school-nav-gradient {
+  background: linear-gradient(90deg, #991622 0%, #b31d27 40%, #c52433 80%, #d32f2f 100%) !important;
+}
+
+/* Tool Image Thumbnail */
+.tool-thumb-wrapper {
+  position: relative;
+  height: 175px;
+  overflow: hidden;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  background: #f1f5f9;
+}
+
+.tool-thumb-wrapper img, .tool-thumb-wrapper svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.portal-card-interactive:hover .tool-thumb-wrapper img,
+.portal-card-interactive:hover .tool-thumb-wrapper svg {
+  transform: scale(1.04);
+}
+
+/* Badges */
+.badge-red {
+  background-color: #fee2e2 !important;
+  color: #991b1b !important;
+  border: 1px solid #fecaca !important;
+}
+
+.badge-amber {
+  background-color: #fef3c7 !important;
+  color: #92400e !important;
+  border: 1px solid #fde68a !important;
+}
+
+.badge-blue {
+  background-color: #e0f2fe !important;
+  color: #075985 !important;
+  border: 1px solid #bae6fd !important;
+}
+
+.badge-emerald {
+  background-color: #dcfce7 !important;
+  color: #166534 !important;
+  border: 1px solid #bbf7d0 !important;
+}
+
+/* Buttons */
+.btn-primary-red {
+  background-color: var(--primary-red) !important;
+  color: #ffffff !important;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.btn-primary-red:hover {
+  background-color: var(--hover-red) !important;
+  box-shadow: 0 4px 12px rgba(200, 35, 51, 0.3);
+}
+
+.btn-secondary-light {
+  background-color: #f8fafc !important;
+  color: #334155 !important;
+  border: 1px solid #cbd5e1 !important;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary-light:hover {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+  border-color: #94a3b8 !important;
+}
+
+/* Modal styling */
+.modal-overlay {
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(4px);
+}
+
+.modal-enter {
+  animation: modalEnter 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes modalEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.97) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Toast Container */
+#toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.toast-item {
+  pointer-events: auto;
+  background: #ffffff;
+  color: #1e293b;
+  border-left: 4px solid var(--primary-red);
+  padding: 12px 18px;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  animation: toastSlide 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes toastSlide {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* Code viewer in modal */
+pre code {
+  font-family: 'JetBrains Mono', Consolas, Monaco, monospace !important;
+  font-size: 12.5px !important;
+  line-height: 1.65 !important;
+}
