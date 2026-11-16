@@ -1,41 +1,43 @@
 @echo off
 chcp 65001 >nul
 echo ========================================================
-echo   CÔNG CỤ TỰ ĐỘNG ĐẨY CODE LÊN GITHUB PAGES
-echo   Website Cá Nhân • Hoàng Tuyên
+echo   CONG CU TU DONG DAY CODE LEN GITHUB PAGES
+echo   Website Ca Nhan • Hoang Tuyen
 echo ========================================================
 echo.
 
 set DEFAULT_URL=https://github.com/hoangtuyen47/vuivui.git
-echo Mặc định kho lưu trữ: %DEFAULT_URL%
-set /p REPO_URL="Bấm ENTER để đẩy lên kho mặc định trên (hoặc dán link mới vào đây): "
+echo Mac dinh kho luu tru: %DEFAULT_URL%
+set /p REPO_URL="Bam ENTER de day len kho mac dinh tren: "
 
 if "%REPO_URL%"=="" set REPO_URL=%DEFAULT_URL%
 
 echo.
-echo Đang đẩy mã nguồn lên: %REPO_URL%
+echo Dang day ma nguon len: %REPO_URL%
+
+git config user.email "hoangtuyen47@gmail.com"
+git config user.name "HoangTuyen"
 
 echo.
-echo [1/4] Khởi tạo kho lưu trữ Git...
+echo [1/4] Khoi tao nhanh Git...
 git init
 git checkout -B main
 
-echo [2/4] Thêm toàn bộ mã nguồn và tệp tĩnh...
+echo [2/4] Them toan bo ma nguon va tep tinh...
 git add .
 
-echo [3/4] Tạo bản ghi chú Commit...
-git commit -m "Cập nhật portfolio giáo dục Hoàng Tuyên - %date% %time%"
+echo [3/4] Tao ban ghi chu Commit...
+git commit -m "Cap nhat 12 bai hoc 3 nhom va bao mat admin - %date% %time%"
 
-echo [4/4] Đẩy mã nguồn lên GitHub...
+echo [4/4] Day ma nguon len GitHub...
 git remote remove origin 2>nul
 git remote add origin %REPO_URL%
 git push -u origin main --force
 
 echo.
 echo ========================================================
-echo   HOÀN TẤT ĐẨY MÃ NGUỒN LÊN GITHUB!
-echo   Bây giờ bạn chỉ cần vào Repository -> Settings -> Pages
-echo   Chọn nhánh 'main' và thư mục '/ (root)' rồi bấm Save!
+echo   HOAN TAT DAY MA NGUON LEN GITHUB!
+echo   Website se tu dong cap nhat trong 1-2 phut.
 echo ========================================================
 echo.
 pause
