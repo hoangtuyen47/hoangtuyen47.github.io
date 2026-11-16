@@ -31,7 +31,7 @@
 <body class="min-h-screen flex flex-col">
 
   <!-- ========================================================================= -->
-  <!-- 1. MÀN HÌNH KHÓA BẢO MẬT (CHỈ HIỂN THỊ KHI CHƯA NHẬP MÃ PIN) -->
+  <!-- 1. MÀN HÌNH KHÓA BẢO MẬT (TUYỆT ĐỐI KHÔNG HIỂN THỊ MẬT KHẨU) -->
   <!-- ========================================================================= -->
   <div id="admin-auth-screen" class="fixed inset-0 z-50 bg-slate-900/95 backdrop-blur-md flex items-center justify-center p-4">
     <div class="admin-card max-w-md w-full p-6 sm:p-8 space-y-6 text-center border-slate-700 bg-slate-900 text-white shadow-2xl">
@@ -103,7 +103,7 @@
               BẢNG QUẢN TRỊ HỆ THỐNG • HOÀNG TUYÊN
             </h1>
             <p class="text-[11px] text-slate-400 hidden sm:block">
-              Quản lý Kho Học Liệu Số (3 nhóm) • Các Lớp Học • Công Cụ &amp; Xuất dữ liệu data.js
+              Quản lý Học Liệu • Upload Avatar/Banner • Lớp Học • Công Cụ &amp; Xuất dữ liệu
             </p>
           </div>
         </div>
@@ -126,6 +126,10 @@
           <button onclick="switchAdminTab('tab-library')" id="nav-tab-library" class="px-3.5 py-2 rounded-lg bg-red-600 text-white flex items-center gap-2 whitespace-nowrap">
             <i data-lucide="book-open" class="w-4 h-4"></i>
             <span>Kho Học Liệu (3 Nhóm)</span>
+          </button>
+          <button onclick="switchAdminTab('tab-branding')" id="nav-tab-branding" class="px-3.5 py-2 rounded-lg hover:text-white hover:bg-slate-800 flex items-center gap-2 whitespace-nowrap">
+            <i data-lucide="image" class="w-4 h-4"></i>
+            <span>Avatar &amp; Banner</span>
           </button>
           <button onclick="switchAdminTab('tab-classes')" id="nav-tab-classes" class="px-3.5 py-2 rounded-lg hover:text-white hover:bg-slate-800 flex items-center gap-2 whitespace-nowrap">
             <i data-lucide="graduation-cap" class="w-4 h-4"></i>
@@ -151,7 +155,7 @@
     <main class="max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex-1 space-y-6">
 
       <!-- ===================================================================== -->
-      <!-- TAB 1: QUẢN LÝ KHO HỌC LIỆU SỐ (3 NHÓM) -->
+      <!-- TAB 1: QUẢN LÝ KHO HỌC LIỆU SỐ (3 NHÓM + UPLOAD ẢNH & SƠ ĐỒ) -->
       <!-- ===================================================================== -->
       <div id="tab-library" class="space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-xl border border-slate-200">
@@ -165,7 +169,7 @@
           </button>
         </div>
 
-        <!-- Danh sách 12 bài học hiện có -->
+        <!-- Danh sách bài học hiện có -->
         <div class="space-y-3">
           <div class="flex items-center justify-between">
             <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wide">Danh sách bài học hiện có (<span id="total-lessons-count">0</span> bài):</h3>
@@ -182,15 +186,15 @@
           </div>
         </div>
 
-        <!-- Form thêm bài học mới -->
+        <!-- Form thêm bài học mới với nút Upload ảnh -->
         <div id="form-new-lesson-card" class="admin-card p-6 space-y-4 border-2 border-red-200">
           <div class="flex items-center gap-2 font-bold text-red-700 text-base border-b pb-2 border-red-100">
             <i data-lucide="file-plus-2" class="w-5 h-5"></i>
-            <span>Thêm Bài Viết / Dự Án Mới Vào Kho Học Liệu</span>
+            <span>Thêm Bài Viết / Dự Án Mới Vào Kho Học Liệu (Hỗ Trợ Tải Ảnh Từ Máy)</span>
           </div>
 
           <form onsubmit="handleCreateNewLesson(event)" class="space-y-4 text-xs">
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label class="block font-bold text-slate-700 mb-1">1. Chọn Nhóm Chuyên Đề (*):</label>
                 <select id="new-lib-group" required class="w-full p-2.5 border rounded-lg bg-white font-bold text-slate-800">
@@ -202,12 +206,25 @@
 
               <div>
                 <label class="block font-bold text-slate-700 mb-1">2. Huy hiệu / Badge linh kiện (*):</label>
-                <input type="text" id="new-lib-badge" placeholder="VD: C++ Arduino, Teachable Machine..." required class="w-full p-2.5 border rounded-lg">
+                <input type="text" id="new-lib-badge" placeholder="VD: C++ Arduino, Teachable Machine..." required class="w-full p-2.5 border rounded-lg font-medium">
               </div>
+            </div>
 
-              <div>
-                <label class="block font-bold text-slate-700 mb-1">3. Đường dẫn Ảnh Minh Họa:</label>
-                <input type="text" id="new-lib-image" placeholder="assets/images/circuit-arduino.svg" value="assets/images/circuit-arduino.svg" class="w-full p-2.5 border rounded-lg">
+            <!-- Tải ảnh minh họa bài viết từ máy tính -->
+            <div class="p-3.5 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+              <label class="block font-bold text-slate-800">3. Ảnh Minh Họa Bài Viết (*):</label>
+              <div class="flex flex-col sm:flex-row items-center gap-3">
+                <input type="text" id="new-lib-image" placeholder="Đường dẫn hoặc ảnh Base64..." value="assets/images/circuit-arduino.svg" class="flex-1 p-2.5 border rounded-lg font-mono text-[11px] bg-white w-full">
+                <label class="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-lg font-bold cursor-pointer flex items-center gap-1.5 shadow-2xs whitespace-nowrap shrink-0">
+                  <i data-lucide="upload" class="w-4 h-4"></i>
+                  <span>Chọn Ảnh Từ Máy</span>
+                  <input type="file" accept="image/*" onchange="handleFileUpload(this, 'new-lib-image', 'preview-new-lib-image', 900)" class="hidden">
+                </label>
+              </div>
+              <!-- Khung xem trước ảnh bài viết -->
+              <div class="flex items-center gap-3 pt-1">
+                <span class="text-[11px] text-slate-500 font-semibold">Xem trước:</span>
+                <img id="preview-new-lib-image" src="assets/images/circuit-arduino.svg" alt="Preview ảnh bài viết" class="h-16 w-28 object-cover rounded-lg border border-slate-300 shadow-2xs">
               </div>
             </div>
 
@@ -238,21 +255,33 @@
               </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label class="block font-bold text-slate-700 mb-1">9. Ảnh Sơ Đồ 2D (Đường dẫn):</label>
-                <input type="text" id="new-lib-diagram" placeholder="assets/images/circuit-arduino.svg" value="assets/images/circuit-arduino.svg" class="w-full p-2.5 border rounded-lg">
+            <!-- Tải ảnh Sơ đồ 2D từ máy tính -->
+            <div class="p-3.5 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+              <label class="block font-bold text-slate-800">9. Ảnh Sơ Đồ Mạch 2D:</label>
+              <div class="flex flex-col sm:flex-row items-center gap-3">
+                <input type="text" id="new-lib-diagram" placeholder="assets/images/circuit-arduino.svg" value="assets/images/circuit-arduino.svg" class="flex-1 p-2.5 border rounded-lg font-mono text-[11px] bg-white w-full">
+                <label class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-bold cursor-pointer flex items-center gap-1.5 shadow-2xs whitespace-nowrap shrink-0">
+                  <i data-lucide="upload" class="w-4 h-4"></i>
+                  <span>Tải Sơ Đồ 2D Từ Máy</span>
+                  <input type="file" accept="image/*" onchange="handleFileUpload(this, 'new-lib-diagram', 'preview-new-lib-diagram', 1000)" class="hidden">
+                </label>
               </div>
+              <div class="flex items-center gap-3 pt-1">
+                <span class="text-[11px] text-slate-500 font-semibold">Xem trước sơ đồ:</span>
+                <img id="preview-new-lib-diagram" src="assets/images/circuit-arduino.svg" alt="Preview sơ đồ" class="h-16 w-28 object-contain bg-slate-900 rounded-lg border border-slate-700 p-1">
+              </div>
+            </div>
 
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label class="block font-bold text-slate-700 mb-1">10. Link Mô Phỏng 3D (Wokwi / Tinkercad):</label>
                 <input type="url" id="new-lib-3d" placeholder="https://wokwi.com/projects/..." class="w-full p-2.5 border rounded-lg">
               </div>
-            </div>
 
-            <div>
-              <label class="block font-bold text-slate-700 mb-1">11. Quy Ước Nối Chân (Wiring Guide):</label>
-              <input type="text" id="new-lib-wiring" placeholder="VD: LED chân (+) -> GPIO 2 | Còi Buzzer -> GPIO 15..." class="w-full p-2.5 border rounded-lg font-mono">
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">11. Quy Ước Nối Chân (Wiring Guide):</label>
+                <input type="text" id="new-lib-wiring" placeholder="VD: LED chân (+) -> GPIO 2 | Còi Buzzer -> GPIO 15..." class="w-full p-2.5 border rounded-lg font-mono">
+              </div>
             </div>
 
             <div>
@@ -272,7 +301,96 @@
       </div>
 
       <!-- ===================================================================== -->
-      <!-- TAB 2: QUẢN LÝ CÁC LỚP HỌC -->
+      <!-- TAB 2: QUẢN LÝ AVATAR, SUB-BANNER & LOGO (TẢI TRỰC TIẾP TỪ MÁY TÍNH) -->
+      <!-- ===================================================================== -->
+      <div id="tab-branding" class="space-y-6 hidden">
+        <div class="bg-white p-4 rounded-xl border border-slate-200">
+          <h2 class="text-lg font-bold text-slate-900">Quản Lý Nhận Diện &amp; Tải Ảnh Avatar, Banner</h2>
+          <p class="text-xs text-slate-500">Tải ảnh trực tiếp từ máy tính lên website cá nhân của Hoàng Tuyên</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <!-- KHỐI 1: TẢI ẢNH AVATAR CÁ NHÂN -->
+          <div class="admin-card p-6 space-y-4 border-2 border-red-200 bg-red-50/20">
+            <div class="flex items-center gap-2 font-bold text-red-700 text-base border-b pb-2 border-red-200">
+              <i data-lucide="user-check" class="w-5 h-5"></i>
+              <span>1. Ảnh Đại Diện (Avatar Cá Nhân)</span>
+            </div>
+
+            <div class="flex items-center gap-4">
+              <!-- Avatar Preview -->
+              <div class="w-24 h-24 rounded-full p-1 bg-white border-2 border-red-600 shadow-md relative shrink-0">
+                <img id="admin-avatar-preview" src="assets/images/teacher-avatar.png" onerror="this.src='assets/images/teacher-avatar.svg'" alt="Avatar Preview" class="w-full h-full rounded-full object-cover">
+              </div>
+
+              <div class="space-y-2 flex-1 text-xs">
+                <p class="text-slate-600">Chọn bất kỳ ảnh đại diện nào từ máy tính của Thầy. Hệ thống sẽ tự động tối ưu hóa tròn viền đỏ đẹp mắt:</p>
+                <div class="flex items-center gap-2">
+                  <label class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold cursor-pointer flex items-center gap-1.5 shadow-sm">
+                    <i data-lucide="camera" class="w-4 h-4"></i>
+                    <span>Tải Ảnh Avatar Từ Máy</span>
+                    <input type="file" accept="image/*" onchange="handleFileUpload(this, 'admin-avatar-path', 'admin-avatar-preview', 400)" class="hidden">
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-2">
+              <label class="block font-bold text-xs text-slate-700 mb-1">Đường dẫn / Dữ liệu Avatar:</label>
+              <input type="text" id="admin-avatar-path" value="assets/images/teacher-avatar.png" class="w-full p-2 border rounded-lg text-xs font-mono bg-white">
+            </div>
+
+            <div class="flex justify-end pt-2">
+              <button onclick="saveAdminAvatar()" class="px-5 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs rounded-xl shadow-sm flex items-center gap-1.5">
+                <i data-lucide="save" class="w-4 h-4"></i>
+                <span>Lưu Avatar Ngay</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- KHỐI 2: TẢI ẢNH SUB-BANNER BÊN PHẢI -->
+          <div class="admin-card p-6 space-y-4 border-2 border-sky-200 bg-sky-50/20">
+            <div class="flex items-center gap-2 font-bold text-sky-800 text-base border-b pb-2 border-sky-200">
+              <i data-lucide="layout" class="w-5 h-5"></i>
+              <span>2. Sub-Banner Nhỏ Bên Phải (620 x 180)</span>
+            </div>
+
+            <div class="space-y-3 text-xs">
+              <p class="text-slate-600">Hiển thị góc bên phải của thanh Banner đỏ 1920x250 ngoài trang chủ:</p>
+              
+              <!-- Sub-Banner Preview -->
+              <div class="p-2 bg-gradient-to-r from-red-800 to-rose-700 rounded-xl border border-red-300 flex items-center justify-center">
+                <img id="admin-subbanner-preview" src="assets/images/sub-banner.png" onerror="this.src='assets/images/sub-banner.svg'" alt="Sub Banner Preview" class="max-h-[90px] w-auto object-contain rounded">
+              </div>
+
+              <div class="flex items-center gap-2 pt-1">
+                <label class="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-xl font-bold cursor-pointer flex items-center gap-1.5 shadow-sm">
+                  <i data-lucide="upload" class="w-4 h-4"></i>
+                  <span>Tải Sub-Banner Từ Máy</span>
+                  <input type="file" accept="image/*" onchange="handleFileUpload(this, 'admin-subbanner-path', 'admin-subbanner-preview', 1240)" class="hidden">
+                </label>
+              </div>
+
+              <div>
+                <label class="block font-bold text-xs text-slate-700 mb-1">Đường dẫn Sub-Banner:</label>
+                <input type="text" id="admin-subbanner-path" value="assets/images/sub-banner.png" class="w-full p-2 border rounded-lg text-xs font-mono bg-white">
+              </div>
+
+              <div class="flex justify-end pt-2">
+                <button onclick="saveAdminSubBanner()" class="px-5 py-2.5 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs rounded-xl shadow-sm flex items-center gap-1.5">
+                  <i data-lucide="save" class="w-4 h-4"></i>
+                  <span>Lưu Sub-Banner</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ===================================================================== -->
+      <!-- TAB 3: QUẢN LÝ CÁC LỚP HỌC (CÓ UPLOAD ẢNH) -->
       <!-- ===================================================================== -->
       <div id="tab-classes" class="space-y-6 hidden">
         <div class="bg-white p-4 rounded-xl border border-slate-200">
@@ -296,6 +414,23 @@
               <div>
                 <label class="block font-bold text-slate-700 mb-1">Huy Hiệu (*):</label>
                 <input type="text" id="new-cls-badge" required placeholder="VD: Tuyển sinh, Nâng cao..." class="w-full p-2.5 border rounded-lg">
+              </div>
+            </div>
+
+            <!-- Upload ảnh khóa học từ máy -->
+            <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+              <label class="block font-bold text-slate-800">Ảnh Minh Họa Khóa Học:</label>
+              <div class="flex flex-col sm:flex-row items-center gap-3">
+                <input type="text" id="new-cls-image" placeholder="assets/images/lop_hoc_ky_nang_so.png" value="assets/images/lop_hoc_ky_nang_so.png" class="flex-1 p-2 border rounded-lg font-mono text-[11px] bg-white w-full">
+                <label class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold cursor-pointer flex items-center gap-1.5 shadow-2xs whitespace-nowrap shrink-0">
+                  <i data-lucide="upload" class="w-4 h-4"></i>
+                  <span>Tải Ảnh Khóa Học</span>
+                  <input type="file" accept="image/*" onchange="handleFileUpload(this, 'new-cls-image', 'preview-new-cls-image', 800)" class="hidden">
+                </label>
+              </div>
+              <div class="flex items-center gap-3 pt-1">
+                <span class="text-[11px] text-slate-500 font-semibold">Xem trước:</span>
+                <img id="preview-new-cls-image" src="assets/images/lop_hoc_ky_nang_so.png" alt="Preview lớp" class="h-14 w-24 object-cover rounded-lg border border-slate-300">
               </div>
             </div>
 
@@ -330,7 +465,7 @@
       </div>
 
       <!-- ===================================================================== -->
-      <!-- TAB 3: QUẢN LÝ CÔNG CỤ SỐ -->
+      <!-- TAB 4: QUẢN LÝ CÔNG CỤ SỐ (CÓ UPLOAD ẢNH) -->
       <!-- ===================================================================== -->
       <div id="tab-systems" class="space-y-6 hidden">
         <div class="bg-white p-4 rounded-xl border border-slate-200">
@@ -341,10 +476,71 @@
         <div id="admin-systems-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <!-- Dynamically populated -->
         </div>
+
+        <!-- Form thêm công cụ số -->
+        <div class="admin-card p-6 space-y-4">
+          <h3 class="text-sm font-bold text-slate-900 uppercase">Thêm Công Cụ Số Mới:</h3>
+          <form onsubmit="handleCreateNewSystem(event)" class="space-y-3 text-xs">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Tên Công Cụ / Phần Mềm (*):</label>
+                <input type="text" id="new-sys-title" required placeholder="VD: Phần mềm Quản lý..." class="w-full p-2.5 border rounded-lg font-bold">
+              </div>
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Huy Hiệu (*):</label>
+                <input type="text" id="new-sys-badge" required placeholder="VD: Quản trị, Khảo thí..." class="w-full p-2.5 border rounded-lg">
+              </div>
+            </div>
+
+            <!-- Upload ảnh công cụ từ máy -->
+            <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+              <label class="block font-bold text-slate-800">Ảnh Minh Họa Giao Diện / Dashboard:</label>
+              <div class="flex flex-col sm:flex-row items-center gap-3">
+                <input type="text" id="new-sys-image" placeholder="assets/images/dashboard-school.png" value="assets/images/dashboard-school.png" class="flex-1 p-2 border rounded-lg font-mono text-[11px] bg-white w-full">
+                <label class="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold cursor-pointer flex items-center gap-1.5 shadow-2xs whitespace-nowrap shrink-0">
+                  <i data-lucide="upload" class="w-4 h-4"></i>
+                  <span>Tải Ảnh Công Cụ</span>
+                  <input type="file" accept="image/*" onchange="handleFileUpload(this, 'new-sys-image', 'preview-new-sys-image', 800)" class="hidden">
+                </label>
+              </div>
+              <div class="flex items-center gap-3 pt-1">
+                <span class="text-[11px] text-slate-500 font-semibold">Xem trước:</span>
+                <img id="preview-new-sys-image" src="assets/images/dashboard-school.png" alt="Preview công cụ" class="h-14 w-24 object-cover rounded-lg border border-slate-300">
+              </div>
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Mô Tả Ngắn:</label>
+              <textarea id="new-sys-desc" rows="2" placeholder="Giới thiệu mục tiêu của phần mềm..." class="w-full p-2.5 border rounded-lg"></textarea>
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">3 Tính Năng Cốt Lõi (Mỗi gạch đầu dòng 1 dòng):</label>
+              <textarea id="new-sys-features" rows="3" placeholder="Tính năng 1&#10;Tính năng 2&#10;Tính năng 3" class="w-full p-2.5 border rounded-lg"></textarea>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Link Trải Nghiệm Demo:</label>
+                <input type="text" id="new-sys-demo" value="https://hoangtuyen47.github.io" class="w-full p-2.5 border rounded-lg">
+              </div>
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Link Đăng Ký (Zalo):</label>
+                <input type="text" id="new-sys-reg" value="https://zalo.me" class="w-full p-2.5 border rounded-lg">
+              </div>
+            </div>
+
+            <div class="flex justify-end pt-2">
+              <button type="submit" class="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg shadow-sm">
+                Thêm Công Cụ
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
 
       <!-- ===================================================================== -->
-      <!-- TAB 4: ĐỔI MẬT KHẨU / PIN ADMIN -->
+      <!-- TAB 5: ĐỔI MẬT KHẨU / PIN ADMIN -->
       <!-- ===================================================================== -->
       <div id="tab-security" class="space-y-6 hidden">
         <div class="admin-card max-w-xl mx-auto p-6 sm:p-8 space-y-5">
@@ -382,7 +578,7 @@
       </div>
 
       <!-- ===================================================================== -->
-      <!-- TAB 5: XUẤT FILE DATA.JS & ĐỒNG BỘ GITHUB -->
+      <!-- TAB 6: XUẤT FILE DATA.JS & ĐỒNG BỘ GITHUB -->
       <!-- ===================================================================== -->
       <div id="tab-export" class="space-y-6 hidden">
         <div class="admin-card p-6 space-y-4 border-2 border-emerald-300 bg-emerald-50/40">
@@ -393,7 +589,7 @@
             <div>
               <h2 class="text-base font-bold text-emerald-950">Xuất File data.js Để Lưu Vĩnh Viễn &amp; Đồng Bộ Lên GitHub</h2>
               <p class="text-xs text-emerald-800">
-                Toàn bộ các thay đổi (thêm bài viết, lớp học, đổi PIN) sẽ được đóng gói chuẩn cú pháp JavaScript.
+                Toàn bộ ảnh vừa tải lên và dữ liệu bài học sẽ được đóng gói chuẩn cú pháp JavaScript.
               </p>
             </div>
           </div>
@@ -414,7 +610,7 @@
             <p class="font-bold text-emerald-900 uppercase">👉 2 Bước Cập Nhật Website Lên Internet (GitHub Pages):</p>
             <ol class="list-decimal list-inside space-y-1.5 pl-1 leading-relaxed">
               <li>Lưu file <code class="bg-slate-100 px-1.5 py-0.5 rounded text-emerald-700 font-mono">data.js</code> vừa tải vào thư mục: <code class="bg-slate-100 px-1.5 py-0.5 rounded font-mono">teacher_portfolio_hubssets\js\data.js</code></li>
-              <li>Ra màn hình Desktop, nhấp đúp chuột vào file: <strong class="text-red-600">CAP_NHAT_WEBSITE_LEN_GITHUB.bat</strong> và bấm <strong>Enter</strong> là xong!</li>
+              <li>Ra màn hình Desktop, nhấp đúp vào file: <strong class="text-red-600">CAP_NHAT_WEBSITE_LEN_GITHUB.bat</strong> và bấm <strong>Enter</strong> là xong!</li>
             </ol>
           </div>
 
@@ -440,20 +636,67 @@
   </div>
 
   <!-- Nạp dữ liệu data.js gốc -->
-  <script src="assets/js/data.js?v=2026.11.16.4"></script>
+  <script src="assets/js/data.js?v=2026.11.16.6"></script>
 
-  <!-- Script Quản Trị Hoàn Chỉnh -->
+  <!-- Script Quản Trị Hoàn Chỉnh & Công Cụ Tải Ảnh Từ Máy Tính -->
   <script>
     const ADMIN_STORAGE_KEY = 'HOANG_TUYEN_ADMIN_AUTH';
     let currentAdminFilter = 'all';
 
-    // 1. Quản lý Đăng nhập & Xác thực PIN
+    // 0. BỘ XỬ LÝ UPLOAD ẢNH TỪ MÁY TÍNH (Nén nhẹ tự động & Base64 Data URL)
+    function handleFileUpload(input, targetInputId, previewImgId, maxDim = 1000) {
+      const file = input.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const rawDataUrl = e.target.result;
+        
+        // Nén ảnh qua Canvas để giữ file nhẹ nhàng, load siêu nhanh
+        const img = new Image();
+        img.onload = function() {
+          let width = img.width;
+          let height = img.height;
+
+          if (width > maxDim || height > maxDim) {
+            if (width > height) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          // Nén ảnh sang JPEG 85% hoặc PNG
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.86);
+
+          const targetInput = document.getElementById(targetInputId);
+          if (targetInput) targetInput.value = compressedDataUrl;
+
+          const previewImg = document.getElementById(previewImgId);
+          if (previewImg) {
+            previewImg.src = compressedDataUrl;
+            previewImg.classList.remove('hidden');
+          }
+
+          showToast('📸 Đã tải ảnh lên & xem trước thành công!');
+        };
+        img.src = rawDataUrl;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // 1. Quản lý Đăng nhập & Xác thực PIN (Không lộ mật khẩu)
     function getStoredPin() {
-      const saved = localStorage.getItem('THAY_TUYEN_ADMIN_PIN');
-      if (saved && saved !== 'admin123' && saved !== 'admin') {
-        return saved;
-      }
-      return PORTFOLIO_DATA.adminPin;
+      const localPin = localStorage.getItem('THAY_TUYEN_ADMIN_PIN');
+      return (localPin && localPin.trim() !== '') ? localPin : PORTFOLIO_DATA.adminPin;
     }
 
     function checkAuthOnLoad() {
@@ -514,7 +757,7 @@
 
     // 2. Chuyển đổi các Tab
     function switchAdminTab(tabId) {
-      const tabs = ['tab-library', 'tab-classes', 'tab-systems', 'tab-security', 'tab-export'];
+      const tabs = ['tab-library', 'tab-branding', 'tab-classes', 'tab-systems', 'tab-security', 'tab-export'];
       tabs.forEach(t => {
         const el = document.getElementById(t);
         const nav = document.getElementById('nav-' + t);
@@ -538,6 +781,42 @@
       renderAdminLessonsList();
       renderAdminClassesList();
       renderAdminSystemsList();
+      syncBrandingInputs();
+    }
+
+    function syncBrandingInputs() {
+      // Đồng bộ avatar & banner vào tab branding
+      const avatarInput = document.getElementById('admin-avatar-path');
+      const avatarPreview = document.getElementById('admin-avatar-preview');
+      if (avatarInput && PORTFOLIO_DATA.profile?.avatar) {
+        avatarInput.value = PORTFOLIO_DATA.profile.avatar;
+        if (avatarPreview) avatarPreview.src = PORTFOLIO_DATA.profile.avatar;
+      }
+
+      const subInput = document.getElementById('admin-subbanner-path');
+      const subPreview = document.getElementById('admin-subbanner-preview');
+      if (subInput && PORTFOLIO_DATA.banner?.subBannerImage) {
+        subInput.value = PORTFOLIO_DATA.banner.subBannerImage;
+        if (subPreview) subPreview.src = PORTFOLIO_DATA.banner.subBannerImage;
+      }
+    }
+
+    function saveAdminAvatar() {
+      const val = document.getElementById('admin-avatar-path').value.trim();
+      if (!val) return;
+      PORTFOLIO_DATA.profile.avatar = val;
+      saveLocalAdminData();
+      showToast('✅ Đã cập nhật ảnh Avatar mới!');
+      switchAdminTab('tab-export');
+    }
+
+    function saveAdminSubBanner() {
+      const val = document.getElementById('admin-subbanner-path').value.trim();
+      if (!val) return;
+      PORTFOLIO_DATA.banner.subBannerImage = val;
+      saveLocalAdminData();
+      showToast('✅ Đã cập nhật Sub-Banner mới!');
+      switchAdminTab('tab-export');
     }
 
     function filterAdminLibraryList(group) {
@@ -685,7 +964,7 @@
         title: document.getElementById('new-cls-title').value.trim(),
         badge: document.getElementById('new-cls-badge').value.trim() || 'Khóa mới',
         badgeColor: 'emerald',
-        image: 'assets/images/lop_hoc_ky_nang_so.png',
+        image: document.getElementById('new-cls-image').value.trim() || 'assets/images/lop_hoc_ky_nang_so.png',
         target: document.getElementById('new-cls-target').value.trim() || 'Học sinh',
         highlights: highlights,
         schedule: document.getElementById('new-cls-schedule').value.trim() || 'Lịch linh hoạt',
@@ -701,7 +980,34 @@
       switchAdminTab('tab-export');
     }
 
-    // 6. Xử lý Đổi PIN
+    // 6. Xử lý Thêm Công Cụ Số Mới
+    function handleCreateNewSystem(e) {
+      e.preventDefault();
+      const featuresText = document.getElementById('new-sys-features').value.trim();
+      const features = featuresText ? featuresText.split('\n').filter(l => l.trim()) : [];
+
+      const newSys = {
+        id: 'sys-' + Date.now(),
+        title: document.getElementById('new-sys-title').value.trim(),
+        badge: document.getElementById('new-sys-badge').value.trim() || 'Tiện ích',
+        badgeColor: 'blue',
+        image: document.getElementById('new-sys-image').value.trim() || 'assets/images/dashboard-school.png',
+        description: document.getElementById('new-sys-desc').value.trim(),
+        features: features,
+        demoLink: document.getElementById('new-sys-demo').value.trim() || 'https://hoangtuyen47.github.io',
+        registerLink: document.getElementById('new-sys-reg').value.trim() || 'https://zalo.me',
+        demoAccount: { user: 'admin', pass: '123456' }
+      };
+
+      PORTFOLIO_DATA.systems.push(newSys);
+      saveLocalAdminData();
+      renderAdminSystemsList();
+      e.target.reset();
+      showToast('✅ Đã thêm công cụ số mới thành công!');
+      switchAdminTab('tab-export');
+    }
+
+    // 7. Xử lý Đổi PIN
     function handleChangePin(e) {
       e.preventDefault();
       const curr = document.getElementById('change-pin-current').value.trim();
@@ -728,7 +1034,7 @@
       switchAdminTab('tab-export');
     }
 
-    // 7. Lưu trữ Local & Xuất file data.js
+    // 8. Lưu trữ Local & Xuất file data.js
     function saveLocalAdminData() {
       try {
         localStorage.setItem('THAY_TUYEN_PORTFOLIO_DATA', JSON.stringify(PORTFOLIO_DATA));

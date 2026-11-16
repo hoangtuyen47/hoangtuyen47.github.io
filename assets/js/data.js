@@ -5,7 +5,7 @@
  */
 
 const PORTFOLIO_DATA = {
-  version: "2026.11.16.v3",
+  version: "2026.11.16.v5",
 
   // Cấu hình bảo mật Admin (Mã PIN / Mật khẩu quản trị)
   adminPin: "ht2027@",
@@ -13,7 +13,7 @@ const PORTFOLIO_DATA = {
   // Cấu hình Banner 1920 x 250
   banner: {
     logoImage: "assets/images/header-logo.svg",
-    subBannerImage: "assets/images/sub-banner.svg",
+    subBannerImage: "assets/images/sub-banner.png",
     heightDesktop: 250,
     widthMax: 1920
   },
@@ -22,7 +22,7 @@ const PORTFOLIO_DATA = {
   profile: {
     fullName: "Hoàng Tuyên",
     bio: "Chào mừng quý thầy cô, phụ huynh và các em học sinh! Nơi tổng hợp các giải pháp công nghệ giáo dục, khóa đào tạo kỹ năng số và kho học liệu STEM thực hành.",
-    avatar: "assets/images/teacher-avatar.svg",
+    avatar: "assets/images/teacher-avatar.png",
     contacts: {
       zalo: "https://zalo.me",
       facebook: "https://facebook.com",

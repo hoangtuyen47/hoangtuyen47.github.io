@@ -34,6 +34,26 @@ function renderProfile() {
   const bioEl = document.getElementById('profile-bio');
   if (bioEl) bioEl.textContent = p.bio;
 
+  // Cập nhật Avatar từ data.js
+  const avatarEl = document.getElementById('profile-avatar');
+  if (avatarEl && p.avatar) {
+    avatarEl.src = p.avatar;
+    avatarEl.onerror = () => {
+      avatarEl.onerror = null;
+      avatarEl.src = 'assets/images/teacher-avatar.svg';
+    };
+  }
+
+  // Cập nhật Sub-Banner từ data.js
+  const subBannerEl = document.getElementById('header-right-banner');
+  if (subBannerEl && PORTFOLIO_DATA.banner && PORTFOLIO_DATA.banner.subBannerImage) {
+    subBannerEl.src = PORTFOLIO_DATA.banner.subBannerImage;
+    subBannerEl.onerror = () => {
+      subBannerEl.onerror = null;
+      subBannerEl.src = 'assets/images/sub-banner.svg';
+    };
+  }
+
   // 4 Kênh kết nối trực tiếp
   setLinkHref('link-zalo', p.contacts?.zalo);
   setLinkHref('link-facebook', p.contacts?.facebook);
