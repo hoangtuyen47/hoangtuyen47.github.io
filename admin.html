@@ -630,6 +630,155 @@
   </div>
 
   <!-- Toast Notification -->
+  
+  <!-- ========================================================================= -->
+  <!-- MODAL CHỈNH SỬA BÀI VIẾT KHO HỌC LIỆU SỐ (FULL OPTION + UPLOAD ẢNH & SƠ ĐỒ) -->
+  <!-- ========================================================================= -->
+  <div id="modal-edit-lesson" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[92vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden my-auto animate-fadeIn">
+      <!-- Header Modal -->
+      <div class="px-6 py-4 bg-gradient-to-r from-slate-900 via-slate-800 to-blue-950 text-white flex items-center justify-between border-b border-slate-700">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-md">
+            <i data-lucide="edit-3" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-base text-white flex items-center gap-2">
+              <span>Chỉnh Sửa Bài Viết Kho Học Liệu</span>
+              <span id="edit-lib-badge-tag" class="px-2 py-0.5 rounded text-[10.5px] font-mono font-bold bg-blue-500/30 text-blue-200 border border-blue-400/30">#ID</span>
+            </h3>
+            <p class="text-xs text-slate-300">Cập nhật nội dung, tải ảnh mới từ máy tính, đổi sơ đồ 2D hoặc dán link tài liệu</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeEditLessonModal()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-colors">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Body Modal: Form chỉnh sửa -->
+      <form id="form-edit-lesson" onsubmit="handleSaveLessonEdit(event)" class="p-6 overflow-y-auto space-y-4 text-xs flex-1">
+        <input type="hidden" id="edit-lib-id">
+
+        <!-- Nhóm & Huy hiệu -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">1. Nhóm Chuyên Đề (*):</label>
+            <select id="edit-lib-group" required class="w-full p-2.5 border rounded-lg bg-white font-bold text-slate-800">
+              <option value="digital-skills">💻 Kỹ năng số</option>
+              <option value="esp32">⚡ Lập trình ESP32</option>
+              <option value="arduino">🤖 Lập trình Arduino</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">2. Huy hiệu / Badge linh kiện (*):</label>
+            <input type="text" id="edit-lib-badge" placeholder="VD: C++ Arduino, Teachable Machine..." required class="w-full p-2.5 border rounded-lg font-medium">
+          </div>
+        </div>
+
+        <!-- Tiêu đề & Mô tả ngắn -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">3. Tiêu Đề Bài Viết (*):</label>
+          <input type="text" id="edit-lib-title" placeholder="VD: Dự án Đèn Giao Thông Thông Minh..." required class="w-full p-2.5 border rounded-lg font-bold text-slate-900 text-sm">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">4. Mô Tả Ngắn Gọn (Hiển thị ngoài trang chủ) (*):</label>
+          <textarea id="edit-lib-desc" rows="2" placeholder="Tóm tắt ngắn 1-2 câu về bài viết..." required class="w-full p-2.5 border rounded-lg"></textarea>
+        </div>
+
+        <!-- Tải ảnh minh họa bài viết từ máy tính -->
+        <div class="p-3.5 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+          <div class="flex items-center justify-between">
+            <label class="block font-bold text-slate-800">5. Ảnh Minh Họa Bài Viết (*):</label>
+            <span class="text-[11px] text-slate-500">Dán link ảnh hoặc bấm nút tải ảnh từ máy tính</span>
+          </div>
+          <div class="flex flex-col sm:flex-row items-center gap-3">
+            <input type="text" id="edit-lib-image" oninput="updateEditImagePreview(this.value)" placeholder="Đường dẫn ảnh hoặc chuỗi Base64..." required class="flex-1 p-2.5 border rounded-lg font-mono text-[11px] bg-white w-full">
+            <label class="px-4 py-2 bg-sky-600 hover:bg-sky-700 text-white rounded-lg font-bold cursor-pointer flex items-center gap-1.5 shadow-2xs whitespace-nowrap shrink-0 transition-colors">
+              <i data-lucide="upload" class="w-4 h-4"></i>
+              <span>Chọn Ảnh Từ Máy</span>
+              <input type="file" accept="image/*" onchange="handleFileUpload(this, 'edit-lib-image', 'preview-edit-lib-image', 900)" class="hidden">
+            </label>
+          </div>
+          <!-- Khung xem trước ảnh bài viết -->
+          <div class="flex items-center gap-3 pt-1">
+            <span class="text-[11px] text-slate-500 font-semibold">Xem trước:</span>
+            <img id="preview-edit-lib-image" src="" alt="Xem trước ảnh" class="w-20 h-14 object-cover rounded-lg border border-slate-300 shadow-2xs bg-white" onerror="this.onerror=null; this.src='assets/images/circuit-arduino.svg';">
+          </div>
+        </div>
+
+        <!-- Nội dung văn bản chi tiết -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">6. Nội Dung Chi Tiết (Mục tiêu, nguyên lý, các bước thực hành) (*):</label>
+          <textarea id="edit-lib-content" rows="6" placeholder="Nhập đầy đủ nội dung bài viết, các bước thực hiện..." class="w-full p-2.5 border rounded-lg font-mono text-xs leading-relaxed"></textarea>
+        </div>
+
+        <!-- Tải sơ đồ nối dây 2D từ máy tính -->
+        <div class="p-3.5 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+          <div class="flex items-center justify-between">
+            <label class="block font-bold text-slate-800">7. Sơ Đồ Nối Dây 2D (Nguyên lý / Fritzing):</label>
+            <span class="text-[11px] text-slate-500">Tải ảnh mạch nối dây hoặc dán link ảnh</span>
+          </div>
+          <div class="flex flex-col sm:flex-row items-center gap-3">
+            <input type="text" id="edit-lib-diagram" oninput="updateEditDiagramPreview(this.value)" placeholder="assets/images/circuit-arduino.svg hoặc Base64..." class="flex-1 p-2.5 border rounded-lg font-mono text-[11px] bg-white w-full">
+            <label class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold cursor-pointer flex items-center gap-1.5 shadow-2xs whitespace-nowrap shrink-0 transition-colors">
+              <i data-lucide="upload" class="w-4 h-4"></i>
+              <span>Chọn Sơ Đồ 2D Từ Máy</span>
+              <input type="file" accept="image/*" onchange="handleFileUpload(this, 'edit-lib-diagram', 'preview-edit-lib-diagram', 1000)" class="hidden">
+            </label>
+          </div>
+          <!-- Khung xem trước sơ đồ 2D -->
+          <div class="flex items-center gap-3 pt-1">
+            <span class="text-[11px] text-slate-500 font-semibold">Xem trước:</span>
+            <img id="preview-edit-lib-diagram" src="" alt="Xem trước sơ đồ" class="w-20 h-14 object-contain bg-white rounded-lg border border-slate-300 shadow-2xs" onerror="this.onerror=null; this.src='assets/images/circuit-arduino.svg';">
+          </div>
+        </div>
+
+        <!-- Hướng dẫn nối dây & Link 3D -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">8. Hướng dẫn nối chân / Ghi chú chân nối:</label>
+            <input type="text" id="edit-lib-wiring" placeholder="VD: Chân Trig nối GPIO 5, Echo nối GPIO 18..." class="w-full p-2.5 border rounded-lg">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">9. Đường link mô phỏng 3D / Wokwi / Tinkercad:</label>
+            <input type="url" id="edit-lib-3d" placeholder="https://wokwi.com/projects/... hoặc link 3D" class="w-full p-2.5 border rounded-lg font-mono text-[11px]">
+          </div>
+        </div>
+
+        <!-- Link Video YouTube & File PDF -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">10. Link Video Hướng Dẫn YouTube (nếu có):</label>
+            <input type="url" id="edit-lib-youtube" placeholder="https://www.youtube.com/watch?v=..." class="w-full p-2.5 border rounded-lg font-mono text-[11px]">
+          </div>
+          <div>
+            <label class="block font-bold text-slate-700 mb-1">11. Đường Link Tài Liệu PDF / Google Drive / Thực Hành:</label>
+            <input type="url" id="edit-lib-pdf" placeholder="https://drive.google.com/... hoặc link PDF" class="w-full p-2.5 border rounded-lg font-mono text-[11px]">
+          </div>
+        </div>
+
+        <!-- Mã nguồn Code -->
+        <div>
+          <label class="block font-bold text-slate-700 mb-1">12. Mã Nguồn Lập Trình (C++ / Python / Apps Script):</label>
+          <textarea id="edit-lib-code" rows="8" placeholder="// Nhập code chương trình tại đây..." class="w-full p-2.5 border rounded-lg font-mono text-xs bg-slate-900 text-emerald-400 leading-relaxed"></textarea>
+        </div>
+
+        <!-- Footer Buttons -->
+        <div class="pt-4 border-t flex items-center justify-end gap-3 sticky bottom-0 bg-white py-2">
+          <button type="button" onclick="closeEditLessonModal()" class="px-5 py-2.5 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold transition-colors">
+            Hủy bỏ
+          </button>
+          <button type="submit" class="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl font-bold flex items-center gap-2 shadow-md transition-all">
+            <i data-lucide="check-circle" class="w-4 h-4"></i>
+            <span>Lưu Thay Đổi Bài Viết</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <div id="admin-toast" class="fixed bottom-5 right-5 z-50 bg-slate-900 text-white px-4 py-3 rounded-xl shadow-2xl text-xs font-bold flex items-center gap-2 transform translate-y-20 opacity-0 transition-all duration-300">
     <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
     <span id="admin-toast-text">Thông báo</span>
@@ -845,22 +994,35 @@
       }
 
       container.innerHTML = items.map((item, idx) => `
-        <div class="admin-card p-4 flex flex-col justify-between space-y-3 border hover:border-slate-400 transition-all">
-          <div class="space-y-2">
+        <div class="admin-card p-4 flex flex-col justify-between space-y-3 border hover:border-blue-400 transition-all bg-white rounded-xl shadow-xs">
+          <div class="space-y-2.5">
             <div class="flex items-center justify-between text-[11px]">
-              <span class="px-2 py-0.5 rounded font-bold text-white ${
+              <span class="px-2.5 py-0.5 rounded-full font-bold text-white shadow-2xs ${
                 item.group === 'digital-skills' ? 'bg-emerald-600' :
                 item.group === 'esp32' ? 'bg-rose-600' : 'bg-sky-600'
               }">${item.category || item.group}</span>
-              <span class="text-slate-400 font-mono">#${idx+1}</span>
+              <span class="text-slate-400 font-mono text-[10.5px]">#${idx+1}</span>
             </div>
-            <h4 class="font-bold text-sm text-slate-900 leading-snug">${item.title}</h4>
-            <p class="text-xs text-slate-500 line-clamp-2">${item.description}</p>
+
+            <!-- Thumbnail & Tiêu đề -->
+            <div class="flex gap-3 items-start">
+              <img src="${item.image || 'assets/images/circuit-arduino.svg'}" alt="${item.title}" class="w-16 h-12 object-cover rounded-lg border border-slate-200 shrink-0 bg-slate-50 shadow-2xs" onerror="this.onerror=null; this.src='assets/images/circuit-arduino.svg';">
+              <div class="min-w-0 flex-1">
+                <h4 class="font-bold text-xs sm:text-sm text-slate-900 leading-snug line-clamp-2 hover:text-blue-600 transition-colors" title="${item.title}">${item.title}</h4>
+                <span class="inline-block mt-1 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-600 border border-slate-200">${item.badge || 'STEM'}</span>
+              </div>
+            </div>
+
+            <p class="text-xs text-slate-500 line-clamp-2 leading-relaxed">${item.description}</p>
           </div>
 
-          <div class="pt-2 border-t flex items-center justify-between text-xs">
-            <span class="text-slate-400 font-semibold">${item.badge || 'STEM'}</span>
-            <button onclick="deleteLesson('${item.id}')" class="text-rose-600 hover:text-rose-800 font-bold flex items-center gap-1">
+          <!-- Nút chức năng: Sửa bài viết & Xóa -->
+          <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+            <button onclick="openEditLessonModal('${item.id}')" class="px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-600 text-blue-700 hover:text-white border border-blue-200 text-xs font-bold flex items-center gap-1.5 transition-all shadow-2xs">
+              <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+              <span>Sửa bài viết</span>
+            </button>
+            <button onclick="deleteLesson('${item.id}')" class="px-3 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-600 text-rose-700 hover:text-white border border-rose-200 text-xs font-bold flex items-center gap-1.5 transition-all shadow-2xs">
               <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
               <span>Xóa</span>
             </button>
@@ -949,7 +1111,28 @@
         PORTFOLIO_DATA.studentLibrary = PORTFOLIO_DATA.studentLibrary.filter(i => i.id !== id);
         saveLocalAdminData();
         renderAdminLessonsList();
+        updateExportCodePreview();
         showToast('🗑️ Đã xóa bài học thành công!');
+      }
+    }
+
+    function deleteClass(id) {
+      if (confirm('Bạn có chắc chắn muốn xóa lớp học này?')) {
+        PORTFOLIO_DATA.classes = PORTFOLIO_DATA.classes.filter(c => c.id !== id);
+        saveLocalAdminData();
+        renderAdminClassesList();
+        updateExportCodePreview();
+        showToast('🗑️ Đã xóa lớp học thành công!');
+      }
+    }
+
+    function deleteSystem(id) {
+      if (confirm('Bạn có chắc chắn muốn xóa công cụ số này?')) {
+        PORTFOLIO_DATA.systems = PORTFOLIO_DATA.systems.filter(s => s.id !== id);
+        saveLocalAdminData();
+        renderAdminSystemsList();
+        updateExportCodePreview();
+        showToast('🗑️ Đã xóa công cụ số thành công!');
       }
     }
 
@@ -1092,6 +1275,128 @@
 
     // Khởi động khi tải trang
     document.addEventListener('DOMContentLoaded', checkAuthOnLoad);
+  
+    // =========================================================================
+    // 4. CHỨC NĂNG CHỈNH SỬA BÀI VIẾT KHO HỌC LIỆU (MODAL EDIT)
+    // =========================================================================
+    function openEditLessonModal(lessonId) {
+      const item = PORTFOLIO_DATA.studentLibrary.find(i => i.id === lessonId);
+      if (!item) {
+        alert('Không tìm thấy bài viết cần sửa!');
+        return;
+      }
+
+      document.getElementById('edit-lib-id').value = item.id;
+      document.getElementById('edit-lib-badge-tag').textContent = '#' + item.id;
+      document.getElementById('edit-lib-group').value = item.group || 'digital-skills';
+      document.getElementById('edit-lib-badge').value = item.badge || '';
+      document.getElementById('edit-lib-title').value = item.title || '';
+      document.getElementById('edit-lib-desc').value = item.description || '';
+      document.getElementById('edit-lib-image').value = item.image || '';
+
+      const previewImg = document.getElementById('preview-edit-lib-image');
+      if (previewImg) {
+        previewImg.src = item.image || 'assets/images/circuit-arduino.svg';
+        previewImg.classList.remove('hidden');
+      }
+
+      document.getElementById('edit-lib-content').value = item.contentDetail || item.description || '';
+      document.getElementById('edit-lib-diagram').value = item.diagramImage || '';
+
+      const previewDiag = document.getElementById('preview-edit-lib-diagram');
+      if (previewDiag) {
+        previewDiag.src = item.diagramImage || 'assets/images/circuit-arduino.svg';
+        previewDiag.classList.remove('hidden');
+      }
+
+      document.getElementById('edit-lib-wiring').value = item.wiringGuide || '';
+      document.getElementById('edit-lib-3d').value = item.model3dUrl || '';
+      document.getElementById('edit-lib-youtube').value = item.youtubeUrl || '';
+      document.getElementById('edit-lib-pdf').value = item.pdfUrl || '';
+      document.getElementById('edit-lib-code').value = item.codeSnippet || '';
+
+      const modal = document.getElementById('modal-edit-lesson');
+      if (modal) {
+        modal.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+      }
+      lucide.createIcons();
+    }
+
+    function closeEditLessonModal() {
+      const modal = document.getElementById('modal-edit-lesson');
+      if (modal) {
+        modal.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+      }
+    }
+
+    function updateEditImagePreview(src) {
+      const preview = document.getElementById('preview-edit-lib-image');
+      if (preview) {
+        preview.src = src || 'assets/images/circuit-arduino.svg';
+        preview.classList.remove('hidden');
+      }
+    }
+
+    function updateEditDiagramPreview(src) {
+      const preview = document.getElementById('preview-edit-lib-diagram');
+      if (preview) {
+        preview.src = src || 'assets/images/circuit-arduino.svg';
+        preview.classList.remove('hidden');
+      }
+    }
+
+    function handleSaveLessonEdit(e) {
+      e.preventDefault();
+      const id = document.getElementById('edit-lib-id').value;
+      const item = PORTFOLIO_DATA.studentLibrary.find(i => i.id === id);
+      if (!item) {
+        alert('Lỗi: Không tìm thấy bài viết để cập nhật!');
+        return;
+      }
+
+      const group = document.getElementById('edit-lib-group').value;
+      const groupLabels = {
+        'digital-skills': 'Kỹ năng số',
+        'esp32': 'Lập trình ESP32',
+        'arduino': 'Lập trình Arduino'
+      };
+
+      item.group = group;
+      item.category = groupLabels[group] || item.category || 'Học liệu STEM';
+      item.badge = document.getElementById('edit-lib-badge').value.trim() || 'Thực hành';
+      item.title = document.getElementById('edit-lib-title').value.trim();
+      item.description = document.getElementById('edit-lib-desc').value.trim();
+      item.image = document.getElementById('edit-lib-image').value.trim() || 'assets/images/circuit-arduino.svg';
+      item.contentDetail = document.getElementById('edit-lib-content').value.trim();
+      item.diagramImage = document.getElementById('edit-lib-diagram').value.trim() || 'assets/images/circuit-arduino.svg';
+      item.wiringGuide = document.getElementById('edit-lib-wiring').value.trim() || 'Xem sơ đồ mạch chuẩn';
+      item.model3dUrl = document.getElementById('edit-lib-3d').value.trim();
+      item.youtubeUrl = document.getElementById('edit-lib-youtube').value.trim();
+      item.pdfUrl = document.getElementById('edit-lib-pdf').value.trim();
+      item.codeSnippet = document.getElementById('edit-lib-code').value.trim();
+
+      saveLocalAdminData();
+      renderAdminLessonsList();
+      updateExportCodePreview();
+      closeEditLessonModal();
+      showToast('✅ Đã lưu cập nhật bài viết thành công!');
+    }
+
+    // Đóng Modal khi nhấn phím Escape hoặc click ra ngoài
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeEditLessonModal();
+      }
+    });
+
+    document.getElementById('modal-edit-lesson')?.addEventListener('click', (e) => {
+      if (e.target.id === 'modal-edit-lesson') {
+        closeEditLessonModal();
+      }
+    });
+
   </script>
 </body>
 </html>
